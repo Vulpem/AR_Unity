@@ -20,7 +20,7 @@ public class TurretController : MonoBehaviour
         current_rotation = gameObject.GetComponent<Transform>().eulerAngles.y;
         dif = Mathf.DeltaAngle(current_rotation, desired_rotation);
 
-        if (Mathf.Abs(dif) > 10)
+        if (Mathf.Abs(dif) > 5)
         {
             gameObject.GetComponent<Transform>().Rotate(Vector3.up, (dif > 0 ? rotation_speed : -rotation_speed) * Time.deltaTime);
             current_rotation = gameObject.GetComponent<Transform>().eulerAngles.y;
