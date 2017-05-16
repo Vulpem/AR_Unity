@@ -16,16 +16,19 @@ public class TurretLaser : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        RaycastHit hit;
-        if (Physics.Raycast(transform.position, transform.forward, out hit, range, mask))
+        if (ray)
         {
-            if (hit.collider.gameObject.tag == "Player")
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, transform.forward, out hit, range, mask))
             {
+                if (hit.collider.gameObject.tag == "Player")
+                {
 
+                }
+                ray.transform.localScale = new Vector3(ray.transform.localScale.x, ray.transform.localScale.y, hit.distance / 2);
             }
-            ray.transform.localScale = new Vector3(ray.transform.localScale.x, ray.transform.localScale.y, hit.distance / 2);
+            else
+                ray.transform.localScale = new Vector3(ray.transform.localScale.x, ray.transform.localScale.y, range / 2);
         }
-        else
-            ray.transform.localScale = new Vector3(ray.transform.localScale.x, ray.transform.localScale.y, range / 2);
     }
 }
