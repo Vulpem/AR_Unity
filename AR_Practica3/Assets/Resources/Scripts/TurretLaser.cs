@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityStandardAssets.Characters.ThirdPerson;
 
 public class TurretLaser : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class TurretLaser : MonoBehaviour
         {
             if (hit.collider.gameObject.tag == "Player")
             {
+                hit.collider.gameObject.GetComponent<Character_Controller>().GetHit();
 
             }
             ray.transform.localScale = new Vector3(ray.transform.localScale.x, ray.transform.localScale.y, hit.distance / 2);
