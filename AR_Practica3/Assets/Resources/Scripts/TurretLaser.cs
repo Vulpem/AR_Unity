@@ -22,13 +22,9 @@ public class TurretLaser : MonoBehaviour
             RaycastHit hit;
             if (Physics.Raycast(transform.position, transform.forward, out hit, range, mask))
             {
-<<<<<<< HEAD
-                hit.collider.gameObject.GetComponent<Character_Controller>().GetHit();
-=======
                 if (hit.collider.gameObject.tag == "Player")
                 {
->>>>>>> f52884873b6dc14f1bda9ef9c2ef36bd090fc053
-
+                    hit.collider.gameObject.GetComponent<Character_Controller>().GetHit();
                 }
                 ray.transform.localScale = new Vector3(ray.transform.localScale.x, ray.transform.localScale.y, hit.distance / 2);
             }
