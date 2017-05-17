@@ -74,7 +74,14 @@ public class Character_Controller : MonoBehaviour
             if (partner != null)
                 partner.total_items++;
             if (item != null)
+            {
                 item.SetActive(false);
+                AudioSource fx = GetComponent<AudioSource>();
+                if (fx)
+                {
+                    fx.Play();
+                }
+            }
             if (total_items == items_parent.transform.childCount)
             {
                 if (exit_door) exit_door.SetActive(true); //TODO
