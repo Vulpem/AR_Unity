@@ -21,9 +21,9 @@ public class Character_Controller : MonoBehaviour
     public GameObject items_parent = null;
     public GameObject exit_door = null;
     public GameObject exit_indicator = null;
+    public LifeManager lifeManager = null;
 
     public int total_items = 0;
-    public int hp = 5;
 
     private float reset_timer_start = 0.0f;
     public float total_reset_time = 2.0f;
@@ -151,11 +151,9 @@ public class Character_Controller : MonoBehaviour
 
     public void GetHit()
     {
-        hp--;
-        partner.hp--;
-        ui.OnLoseHP();
-        if (hp == 0)
+        if (!lifeManager.LooseLife())
         {
+            gameObject.SetActive(false);
             ui.OnMasterWin();
         }
         Reset();
@@ -183,6 +181,8 @@ public class Character_Controller : MonoBehaviour
 
         if (partner.finished == true)
         {
+            m_Character.m_GravityMultiplier = -1.0f;
+            partner.m_Character.m_GravityMultiplier = -1.0f;
             ui.OnPlayersWin();
         }
     }
