@@ -8,7 +8,6 @@ public class ConeOfVision : MonoBehaviour
 
     //For more info or questions ask to Roger Olasz or follow the tutorial which are created from this script: https://www.youtube.com/watch?v=rQG9aUWarwE
 
-    public GameObject policeman;
     //Creating variables to create the cone
     public float view_radius;
     [Range(0, 360)]
