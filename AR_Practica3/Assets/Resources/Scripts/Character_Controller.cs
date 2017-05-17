@@ -21,6 +21,8 @@ public class Character_Controller : MonoBehaviour
     public GameObject items_parent = null;
     public GameObject exit_door = null;
     public GameObject exit_indicator = null;
+    public GameObject blood_splash = null;
+
     public LifeManager lifeManager = null;
 
     public int total_items = 0;
@@ -76,10 +78,10 @@ public class Character_Controller : MonoBehaviour
             if (item != null)
             {
                 item.SetActive(false);
-                AudioSource fx = GetComponent<AudioSource>();
-                if (fx)
+                AudioSource[] fxs = GetComponents<AudioSource>();
+                if (fxs.Length > 0)
                 {
-                    fx.Play();
+                    fxs[0].Play();
                 }
             }
             if (total_items == items_parent.transform.childCount)
@@ -158,6 +160,18 @@ public class Character_Controller : MonoBehaviour
 
     public void GetHit()
     {
+        AudioSource[] fxs = GetComponents<AudioSource>();
+        if (fxs.Length > 1)
+        {
+            fxs[1].Play();
+        }
+        if (blood_splash)
+        {
+            GameObject new_blood = Instantiate(blood_splash);
+            new_blood.transform.SetParent(blood_splash.transform.parent);
+            new_blood.transform.position = this.transform.position;
+            new_blood.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + 0.1f, this.transform.position.z);
+        }
         if (!lifeManager.LooseLife())
         {
             gameObject.SetActive(false);
