@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using System.Collections;
 using UnityStandardAssets.CrossPlatformInput;
 using UnityStandardAssets.Characters.ThirdPerson;
 
@@ -31,6 +32,12 @@ public class Character_Controller : MonoBehaviour
 
     bool finished = false;
 
+    float timeToNextRand = 0.0f;
+    float timer = 0.0f;
+
+    float h = 0;
+    float v = 0;
+
     private void Start()
     {
         // get the transform of the main camera
@@ -47,7 +54,10 @@ public class Character_Controller : MonoBehaviour
 
         // get the third person character ( this should never be null due to require component )
         m_Character = GetComponent<ThirdPersonCharacter>();
-        Reset();
+        if (initial_position)
+        {
+            Reset();
+        }
     }
 
 
@@ -89,18 +99,30 @@ public class Character_Controller : MonoBehaviour
         else
         {
             // read inputs
-            float h = 0;
-            float v = 0;
 
-            if (character == 0 ? Input.GetKey(KeyCode.UpArrow) : Input.GetKey(KeyCode.W))
-                v = 1;
-            else if (character == 0 ? Input.GetKey(KeyCode.DownArrow) : Input.GetKey(KeyCode.S))
-                v = -1;
+            if (initial_position)
+            {
+                if (character == 0 ? Input.GetKey(KeyCode.UpArrow) : Input.GetKey(KeyCode.W))
+                    v = 1;
+                else if (character == 0 ? Input.GetKey(KeyCode.DownArrow) : Input.GetKey(KeyCode.S))
+                    v = -1;
 
-            if (character == 0 ? Input.GetKey(KeyCode.LeftArrow) : Input.GetKey(KeyCode.A))
-                h = -1;
-            else if (character == 0 ? Input.GetKey(KeyCode.RightArrow) : Input.GetKey(KeyCode.D))
-                h = 1;
+                if (character == 0 ? Input.GetKey(KeyCode.LeftArrow) : Input.GetKey(KeyCode.A))
+                    h = -1;
+                else if (character == 0 ? Input.GetKey(KeyCode.RightArrow) : Input.GetKey(KeyCode.D))
+                    h = 1;
+            }
+            else
+            {
+                timer += Time.deltaTime;
+                if (timer > timeToNextRand)
+                {
+                    timer = 0;
+                    v = UnityEngine.Random.Range(-1.5f, 1.5f);
+                    h = UnityEngine.Random.Range(-1.5f, 1.5f);
+                    timeToNextRand = UnityEngine.Random.Range(0.5f, 4.0f);
+                }
+            }
 
             bool crouch = Input.GetKey(KeyCode.C);
 
@@ -116,10 +138,6 @@ public class Character_Controller : MonoBehaviour
                 // we use world-relative directions in the case of no main camera
                 m_Move = v * Vector3.forward + h * Vector3.right;
             }
-#if !MOBILE_INPUT
-            // walk speed multiplier
-            if (Input.GetKey(KeyCode.LeftShift)) m_Move *= 0.5f;
-#endif
 
             // pass all parameters to the character control script
             m_Character.Move(m_Move, crouch, m_Jump);
