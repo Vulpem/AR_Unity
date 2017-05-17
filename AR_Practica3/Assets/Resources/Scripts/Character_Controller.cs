@@ -45,6 +45,8 @@ public class Character_Controller : MonoBehaviour
     float deathTimer = 0.0f;
     bool dying = false;
 
+    float uiTimer = 0.0f;
+
     private void Start()
     {
         // get the transform of the main camera
@@ -65,11 +67,28 @@ public class Character_Controller : MonoBehaviour
         {
             Reset();
         }
+        deathTimer = 0.0f;
+        uiTimer = 0.0f;
     }
 
 
     private void Update()
     {
+        if(character == 0 && Input.GetKey("w") && Input.GetKey("i") && Input.GetKey("n"))
+        {
+            partner.finished = true;
+            OnExitGame();
+        }
+
+        if (character == 0 && finished == true && partner.finished == true)
+        {
+            uiTimer += Time.deltaTime;
+            if (uiTimer > 2.0f)
+            {
+                ui.OnPlayersWin();
+            }
+        }
+
         if (!m_Jump)
         {
             m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
@@ -215,9 +234,7 @@ public class Character_Controller : MonoBehaviour
 
         if (partner.finished == true)
         {
-            m_Character.m_GravityMultiplier = -1.0f;
-            partner.m_Character.m_GravityMultiplier = -1.0f;
-            ui.OnPlayersWin();
+            Physics.gravity = -Physics.gravity;
         }
     }
 }
