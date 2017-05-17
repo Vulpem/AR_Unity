@@ -68,6 +68,12 @@ public class Character_Controller : MonoBehaviour
             // we use self-relative controls in this case, which probably isn't what the user wants, but hey, we warned them!
         }
 
+        Plane p = new Plane(new Vector3(0, 1, 0), new Vector3(0, 0, 0));
+        
+        if (p.SameSide(new Vector3(0, 10, 0), Physics.gravity))
+        {
+            Physics.gravity = -Physics.gravity;
+        }
         // get the third person character ( this should never be null due to require component )
         m_Character = GetComponent<ThirdPersonCharacter>();
         if (initial_position)
