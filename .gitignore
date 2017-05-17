@@ -1,9 +1,7 @@
-Library/
-Temp/
-library/
-temp/
-[Ll]ibrary/
-[Tt]emp/
+*/Library/*
+*/temp/*
+*/[Ll]ibrary/*
+*/[Tt]emp/*
 /[Oo]bj/
 /[Bb]uild/
 /[Bb]uilds/
