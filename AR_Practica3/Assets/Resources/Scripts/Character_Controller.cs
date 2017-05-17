@@ -118,8 +118,8 @@ public class Character_Controller : MonoBehaviour
                 if (timer > timeToNextRand)
                 {
                     timer = 0;
-                    v = UnityEngine.Random.Range(-1.5f, 1.5f);
-                    h = UnityEngine.Random.Range(-1.5f, 1.5f);
+                    v = UnityEngine.Random.Range(-1.0f, 1.0f);
+                    h = UnityEngine.Random.Range(-1.0f, 1.0f);
                     timeToNextRand = UnityEngine.Random.Range(0.5f, 4.0f);
                 }
             }
