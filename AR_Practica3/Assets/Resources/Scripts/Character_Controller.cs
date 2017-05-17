@@ -27,6 +27,9 @@ public class Character_Controller : MonoBehaviour
 
     public int total_items = 0;
 
+    public AudioClip pickupSound;
+    public AudioClip deathSound;
+
     private float reset_timer_start = 0.0f;
     public float total_reset_time = 2.0f;
     private bool frozen = false;
@@ -39,6 +42,17 @@ public class Character_Controller : MonoBehaviour
 
     float h = 0;
     float v = 0;
+
+    public float timeToDie = 0.0f;
+    float deathTimer = 0.0f;
+    bool dying = false;
+
+    public float timeToSplash = 0.0f;
+    float splashTimer = 0.0f;
+    bool to_splash = false;
+    Vector3 splash_position = Vector3.zero;
+
+    float uiTimer = 0.0f;
 
     private void Start()
     {
@@ -60,14 +74,60 @@ public class Character_Controller : MonoBehaviour
         {
             Reset();
         }
+        deathTimer = 0.0f;
+        uiTimer = 0.0f;
     }
 
 
     private void Update()
     {
+        if(character == 0 && Input.GetKey("w") && Input.GetKey("i") && Input.GetKey("n"))
+        {
+            partner.finished = true;
+            OnExitGame();
+        }
+
+        if (character == 0 && finished == true && partner.finished == true)
+        {
+            uiTimer += Time.deltaTime;
+            if (uiTimer > 2.0f)
+            {
+                ui.OnPlayersWin();
+            }
+        }
+
         if (!m_Jump)
         {
             m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
+        }
+
+        if(dying)
+        {
+            deathTimer += Time.deltaTime;
+            if(deathTimer > timeToDie)
+            {
+                to_splash = true;
+                deathTimer = 0.0f;
+                dying = false;
+                Reset();
+            }
+        }
+
+        if (to_splash)
+        {
+            splashTimer += Time.deltaTime;
+
+            if (splashTimer > timeToSplash)
+            {
+                if (blood_splash)
+                {
+                    GameObject new_blood = Instantiate(blood_splash);
+                    new_blood.transform.SetParent(blood_splash.transform.parent);
+                    new_blood.transform.position = new Vector3(splash_position.x, splash_position.y + 0.1f, splash_position.z);
+                }
+                to_splash = false;
+                splashTimer = 0.0f;
+            }
         }
 
         if (item != null)
@@ -78,11 +138,8 @@ public class Character_Controller : MonoBehaviour
             if (item != null)
             {
                 item.SetActive(false);
-                AudioSource[] fxs = GetComponents<AudioSource>();
-                if (fxs.Length > 0)
-                {
-                    fxs[0].Play();
-                }
+                AudioSource fx = GetComponent<AudioSource>();
+                fx.PlayOneShot(pickupSound);
             }
             if (total_items == items_parent.transform.childCount)
             {
@@ -160,24 +217,22 @@ public class Character_Controller : MonoBehaviour
 
     public void GetHit()
     {
-        AudioSource[] fxs = GetComponents<AudioSource>();
-        if (fxs.Length > 1)
+        if (dying == false)
         {
-            fxs[1].Play();
+            splash_position = transform.position;
+            if (!lifeManager.LooseLife())
+            {
+                gameObject.SetActive(false);
+                ui.OnMasterWin();
+            }
+            AudioSource fx = GetComponent<AudioSource>();
+            if (fx)
+            {
+                fx.PlayOneShot(deathSound);
+            }
+            dying = true;
+            Freeze(true);
         }
-        if (blood_splash)
-        {
-            GameObject new_blood = Instantiate(blood_splash);
-            new_blood.transform.SetParent(blood_splash.transform.parent);
-            new_blood.transform.position = this.transform.position;
-            new_blood.transform.position = new Vector3(this.transform.position.x, this.transform.position.y + 0.1f, this.transform.position.z);
-        }
-        if (!lifeManager.LooseLife())
-        {
-            gameObject.SetActive(false);
-            ui.OnMasterWin();
-        }
-        Reset();
     }
 
     void Reset()
@@ -202,9 +257,7 @@ public class Character_Controller : MonoBehaviour
 
         if (partner.finished == true)
         {
-            m_Character.m_GravityMultiplier = -1.0f;
-            partner.m_Character.m_GravityMultiplier = -1.0f;
-            ui.OnPlayersWin();
+            Physics.gravity = -Physics.gravity;
         }
     }
 }
