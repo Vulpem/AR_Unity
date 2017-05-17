@@ -124,6 +124,8 @@ public class Character_Controller : MonoBehaviour
                     GameObject new_blood = Instantiate(blood_splash);
                     new_blood.transform.SetParent(blood_splash.transform.parent);
                     new_blood.transform.position = new Vector3(splash_position.x, splash_position.y + 0.1f, splash_position.z);
+                    float angle = UnityEngine.Random.Range(0.0f, 360.0f);
+                    new_blood.transform.Rotate(new Vector3(0, 0, 1), angle);
                 }
                 to_splash = false;
                 splashTimer = 0.0f;
