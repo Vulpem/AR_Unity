@@ -22,7 +22,6 @@ public class Character_Controller : MonoBehaviour
     public GameObject exit_indicator = null;
 
     public int total_items = 0;
-    public bool near_item = false;
     public int hp = 5;
 
     private float reset_timer_start = 0.0f;
@@ -59,7 +58,7 @@ public class Character_Controller : MonoBehaviour
             m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
         }
 
-        if (near_item == true)
+        if (item != null)
         {
             total_items++;
             if (partner != null)
@@ -71,6 +70,7 @@ public class Character_Controller : MonoBehaviour
                 if (exit_door) exit_door.SetActive(true); //TODO
                 if (exit_indicator) exit_indicator.SetActive(true);
             }
+            item = null;
         }
     }
 

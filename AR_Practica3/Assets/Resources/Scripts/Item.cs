@@ -17,7 +17,6 @@ public class Item : MonoBehaviour {
     {
         if (collider.gameObject.tag == "Player")
         {
-            collider.gameObject.GetComponent<Character_Controller>().near_item = true;
             collider.gameObject.GetComponent<Character_Controller>().item = this.gameObject;
         }
     }
@@ -26,8 +25,7 @@ public class Item : MonoBehaviour {
     {
         if (collider.gameObject.tag == "Player")
         {
-            collider.gameObject.GetComponent<Character_Controller>().near_item = false;
-            collider.gameObject.GetComponent<Character_Controller>().item = this.gameObject;
+            collider.gameObject.GetComponent<Character_Controller>().item = null;
         }
     }
 }
