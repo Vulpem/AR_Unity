@@ -102,6 +102,9 @@ public class Character_Controller : MonoBehaviour
 
             if (initial_position)
             {
+                v = 0;
+                h = 0;
+
                 if (character == 0 ? Input.GetKey(KeyCode.UpArrow) : Input.GetKey(KeyCode.W))
                     v = 1;
                 else if (character == 0 ? Input.GetKey(KeyCode.DownArrow) : Input.GetKey(KeyCode.S))
