@@ -5,8 +5,6 @@ using UnityEngine.SceneManagement;
 public class UI_Controller : MonoBehaviour {
 
     // Use this for initialization
-    public GameObject hp;
-    public List<GameObject> list;
     public GameObject end_panel = null;
     public GameObject win_panel = null;
     public GameObject loose_panel = null;
@@ -14,16 +12,6 @@ public class UI_Controller : MonoBehaviour {
 
 	void Start ()
     {
-        list = new List<GameObject>();
-        list.Add(hp);
-
-        for (uint i = 0; i < 4; ++i)
-        {
-            list.Add(Instantiate(hp));
-            RectTransform transform = list[list.Count - 1].GetComponent<RectTransform>();
-            transform.SetParent(hp.transform.parent, false);
-            transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y + 75 * (i + 1), transform.localPosition.z);
-        }
 	}
 	
 	// Update is called once per frame
@@ -31,18 +19,6 @@ public class UI_Controller : MonoBehaviour {
     {
 	
 	}
-
-    public void OnLoseHP()
-    {
-        for (int i = list.Count - 1; i >= 0; --i)
-        {
-            if (list[i].activeSelf == true)
-            {
-                list[i].SetActive(false);
-                break;
-            }
-        }
-    }
 
     public void OnPlayersWin()
     {
