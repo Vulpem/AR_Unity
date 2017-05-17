@@ -25,6 +25,9 @@ public class Character_Controller : MonoBehaviour
 
     public int total_items = 0;
 
+    public AudioClip pickupSound;
+    public AudioClip deathSound;
+
     private float reset_timer_start = 0.0f;
     public float total_reset_time = 2.0f;
     private bool frozen = false;
@@ -37,6 +40,10 @@ public class Character_Controller : MonoBehaviour
 
     float h = 0;
     float v = 0;
+
+    public float timeToDie = 0.0f;
+    float deathTimer = 0.0f;
+    bool dying = false;
 
     private void Start()
     {
@@ -68,6 +75,17 @@ public class Character_Controller : MonoBehaviour
             m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
         }
 
+        if(dying)
+        {
+            deathTimer += Time.deltaTime;
+            if(deathTimer > timeToDie)
+            {
+                deathTimer = 0.0f;
+                dying = false;
+                Reset();
+            }
+        }
+
         if (item != null)
         {
             total_items++;
@@ -79,7 +97,7 @@ public class Character_Controller : MonoBehaviour
                 AudioSource fx = GetComponent<AudioSource>();
                 if (fx)
                 {
-                    fx.Play();
+                    fx.PlayOneShot(pickupSound);
                 }
             }
             if (total_items == items_parent.transform.childCount)
@@ -158,12 +176,21 @@ public class Character_Controller : MonoBehaviour
 
     public void GetHit()
     {
-        if (!lifeManager.LooseLife())
+        if (dying == false)
         {
-            gameObject.SetActive(false);
-            ui.OnMasterWin();
+            if (!lifeManager.LooseLife())
+            {
+                gameObject.SetActive(false);
+                ui.OnMasterWin();
+            }
+            AudioSource fx = GetComponent<AudioSource>();
+            if (fx)
+            {
+                fx.PlayOneShot(deathSound);
+            }
+            dying = true;
+            Freeze(true);
         }
-        Reset();
     }
 
     void Reset()
