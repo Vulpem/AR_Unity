@@ -8,7 +8,6 @@ public class UI_Controller : MonoBehaviour {
     public GameObject end_panel = null;
     public GameObject win_panel = null;
     public GameObject loose_panel = null;
-    public GameObject hp_panel = null;
 
 	void Start ()
     {
@@ -24,14 +23,12 @@ public class UI_Controller : MonoBehaviour {
     {
         if (end_panel) end_panel.SetActive(true);
         if (win_panel) win_panel.SetActive(true);
-        if (hp_panel) hp_panel.SetActive(false);
     }
 
     public void OnMasterWin()
     {
         if (end_panel) end_panel.SetActive(true);
         if (loose_panel) loose_panel.SetActive(true);
-        if (hp_panel) hp_panel.SetActive(false);
     }
 
     public void PlayAgain()
